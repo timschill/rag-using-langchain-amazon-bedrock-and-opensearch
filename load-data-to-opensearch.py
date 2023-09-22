@@ -36,7 +36,7 @@ def get_bedrock_client(region, account_id):
 def create_vector_embedding_with_bedrock(text, name, bedrock_client):
     payload = {"inputText": f"{text}"}
     body = json.dumps(payload)
-    modelId = "amazon.titan-e1t-medium"
+    modelId = "amazon.titan-embed-g1-text-02"
     accept = "application/json"
     contentType = "application/json"
 
@@ -54,7 +54,7 @@ def main():
     # vars
     region = "us-west-2"
     name = 'rag'
-    dataset_url = "https://huggingface.co/datasets/sentence-transformers/embedding-training-data/resolve/main/gooaq_pairs.jsonl.gz"
+    dataset_url = "https://huggingface.co/datasets/sentence-transformers/embedding-training-data/resolve/main/yahoo_answers_title_answer.jsonl.gz"
     early_stop_record_count = 100
     args, _ = parse_args()
     

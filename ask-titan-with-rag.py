@@ -37,7 +37,7 @@ def get_bedrock_client(region, account_id):
 def create_langchain_vector_embedding_using_bedrock(bedrock_client):
     bedrock_embeddings_client = BedrockEmbeddings(
         client=bedrock_client,
-        model_id="amazon.titan-e1t-medium")
+        model_id="amazon.titan-embed-g1-text-02")
     return bedrock_embeddings_client
     
 
@@ -54,9 +54,9 @@ def create_opensearch_vector_search_client(index_name, opensearch_password, bedr
 
 def create_bedrock_llm(bedrock_client):
     bedrock_llm = Bedrock(
-        model_id="amazon.titan-tg1-large", 
+        model_id="anthropic.claude-v2", 
         client=bedrock_client,
-        model_kwargs={'temperature': 0}
+        model_kwargs={'temperature': 0, 'top_k': 250, 'top_p': 0.999, 'stop_sequences': ["Human"], 'max_tokens_to_sample': 300}
         )
     return bedrock_llm
     
@@ -84,12 +84,18 @@ def main():
         question = "what is the meaning of <3?"
         logging.info(f"No question provided, using default question {question}")
     
-    prompt_template = """Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer. don't include harmful content
+    prompt_template = """Human: Follow exactly these 3 steps
+    1. Read the context below the instructions and aggregate this data
+    2. Answer the question in the end using only the context if possible
+    3. If you don't find the answer in the context, only respond with "I don't know", don't try to make up an answer and don't include harmful content
 
-    {context}
+Context:
+{context}
 
-    Question: {question}
-    Answer:"""
+Question: {question}
+Assistant:
+    """
+
     PROMPT = PromptTemplate(
         template=prompt_template, input_variables=["context", "question"]
     )
@@ -97,7 +103,7 @@ def main():
     logging.info(f"Starting the chain with KNN similarity using OpenSearch, and than passing to Bedrock Titan FM")
     qa = RetrievalQA.from_chain_type(llm=bedrock_llm, 
                                      chain_type="stuff", 
-                                     retriever=opensearch_vector_search_client.as_retriever(),
+                                     retriever=opensearch_vector_search_client.as_retriever(search_kwargs={"k": 3}),
                                      return_source_documents=True,
                                      chain_type_kwargs={"prompt": PROMPT, "verbose": True},
                                      verbose=True)
@@ -110,7 +116,7 @@ def main():
         logging.info(f"With the following similar content from OpenSearch:\n{d.page_content}\n")
         logging.info(f"Text: {d.metadata['text']}")
     
-    logging.info(f"\nThe answer from Titan: {response.get('result')}")
+    logging.info(f"\nThe answer from AI: {response.get('result')}")
     
 
 if __name__ == "__main__":
