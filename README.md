@@ -1,3 +1,8 @@
+> [!NOTE]  
+> This fork utilize Titan Text Embeddings v2 instead of v1.01 since it supports 8k tokens instead of 512.  
+> It also use Anthropic Claude v2 instead of Titan Text Large together with a different prompt for better results.  
+> The embedding dataset has been changed to [yahoo_answers_title_answer.jsonl](https://huggingface.co/datasets/sentence-transformers/embedding-training-data/resolve/main/yahoo_answers_title_answer.jsonl.gz)
+
 # RAG using LangChain with Amazon Bedrock Titan text, and embedding, using OpenSearch vector engine
 
 This sample repository provides a sample code for using RAG (Retrieval augmented generation) method relaying on [Amazon Bedrock](https://aws.amazon.com/bedrock/) [Titan text embedding](https://aws.amazon.com/bedrock/titan/) LLM (Large Language Model), for creating text embedding that will be stored in [Amazon OpenSearch](https://aws.amazon.com/opensearch-service/) with [vector engine support](https://aws.amazon.com/about-aws/whats-new/2023/07/vector-engine-amazon-opensearch-serverless-preview/) for assisting with the prompt engineering task for more accurate response from LLMs.
