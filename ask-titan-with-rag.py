@@ -37,7 +37,7 @@ def get_bedrock_client(region, account_id):
 def create_langchain_vector_embedding_using_bedrock(bedrock_client):
     bedrock_embeddings_client = BedrockEmbeddings(
         client=bedrock_client,
-        model_id="amazon.titan-embed-g1-text-02")
+        model_id="amazon.titan-embed-text-v1")
     return bedrock_embeddings_client
     
 
