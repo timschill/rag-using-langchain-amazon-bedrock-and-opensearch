@@ -1,6 +1,5 @@
 > [!NOTE]  
-> This fork utilize Titan Text Embeddings v2 instead of v1.01 since it supports 8k tokens instead of 512.  
-> It also use Anthropic Claude v2 instead of Titan Text Large together with a different prompt for better results.  
+> The upstream repo has been updated with the same changes originaly found in this repo. The only changes now is the prompt and the embedding dataset.  
 > The embedding dataset has been changed to [yahoo_answers_title_answer.jsonl](https://huggingface.co/datasets/sentence-transformers/embedding-training-data/resolve/main/yahoo_answers_title_answer.jsonl.gz)
 
 # RAG using LangChain with Amazon Bedrock Titan text, and embedding, using OpenSearch vector engine
